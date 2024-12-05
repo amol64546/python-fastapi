@@ -15,7 +15,6 @@ class MongoDBClient:
             cls._instance = super(MongoDBClient, cls).__new__(cls)
             cls._instance.client = MongoClient(os.getenv("MONGO_URI"))
             cls._instance.database = cls._instance.client["test"]
-            logging.info("Connected to MongoDB")
         return cls._instance
 
     def switch_database(self, database_name):

@@ -2,11 +2,14 @@ import logging
 import os
 
 from neo4j import GraphDatabase
-
+from neo4j.exceptions import ClientError
 
 print(f"NEO4J_HOST: {os.getenv('NEO4J_HOST')}")
 print(f"NEO4J_USERNAME: {os.getenv('NEO4J_USERNAME')}")
 print(f"NEO4J_PASSWORD: {os.getenv('NEO4J_PASSWORD')}")
+
+logger = logging.getLogger(__name__)
+
 
 class Neo4jClient:
     _instance = None
@@ -19,15 +22,17 @@ class Neo4jClient:
 
     def __init__(self):
         # Avoid reinitializing if the instance already exists
-        self.database_name = "test"
+        self.database_name = os.getenv("NEO4J_DATABASE")
         if not hasattr(self, 'driver'):
             # Initialize the driver and database connection
+            # self.driver = GraphDatabase.driver(
+            #     os.getenv("NEO4j_HOST"),
+            #     auth=(os.getenv("NEO4J_USERNAME"), os.getenv("NEO4J_PASSWORD"))
+            # )
             self.driver = GraphDatabase.driver(
-                os.getenv("NEO4j_HOST"),
-                auth=(os.getenv("NEO4J_USERNAME"), os.getenv("NEO4J_PASSWORD"))
+                "bolt://localhost:7687",
+                auth=("neo4j", "oooo9999")
             )
-
-            logging.info("Connected to Neo4j")
 
     def ensure_database_exists(self, database_name):
         """
@@ -58,3 +63,37 @@ class Neo4jClient:
         Retrieve the current database in use by the client instance.
         """
         return self.database_name
+
+    def execute_query(self, query, parameters=None, result_transformer=None):
+        """
+        A generic method to execute Cypher queries on Neo4j.
+
+        Parameters:
+            - query: The Cypher query as a string.
+            - parameters: Optional dictionary of parameters for the query.
+            - result_transformer: Optional function to transform the result (e.g., Result.to_df).
+
+        Returns:
+            - The result of the query, possibly transformed.
+        """
+        if parameters is None:
+            parameters = {}
+
+        try:
+            with self.driver.session(database=self.database_name) as session:
+                # Execute the query
+                result = session.run(query, parameters)
+
+                # If a result transformer is provided, apply it
+                if result_transformer:
+                    return result_transformer(result)
+
+                # Otherwise, return the raw result
+                return result
+
+        except ClientError as e:
+            logger.error(f"Error executing query: {e}")
+            if "ConstraintValidationFailed" in str(e):
+                logger.warning("Entity already exists.")
+            else:
+                raise e

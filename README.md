@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 Start the server:
 ```bash
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 8080
 ```
 
 ## API Endpoints
