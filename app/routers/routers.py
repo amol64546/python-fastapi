@@ -28,7 +28,7 @@ def create_user(user: User):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating user: {str(e)}")
 
-def test() -> str:
+def test() -> str, str:
     return "Hello World"
 
 @router.get("/users")
