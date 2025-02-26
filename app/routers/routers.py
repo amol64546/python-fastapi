@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 neo4j_client = Neo4jClient()
 
 @router.post("/users")
-def create_user(user: User):
+def create_user_1(user: User):
     """
     Create a new user and insert into MongoDB.
     """
