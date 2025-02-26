@@ -61,6 +61,11 @@ def db_query(username, ontology_id, cypher: str, params=None) -> pd.DataFrame:
         logger.error(f"Cypher query failed. Query: {cypher}, Params: {params}, Error: {str(e)}")
         return pd.DataFrame()
 
+@router.post('/users/create')
+def create_user(name, email, skip: int = 0, limit: int = 10):
+    """Create a new user with name and email."""
+    data = request.json  # request body
+    return {"message": "User created", "user": data}  # response body
 
 def import_ontology_neo4j(username, ontology_id, ontology_url, file_type, ontology_type):
     try:
