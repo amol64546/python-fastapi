@@ -31,11 +31,14 @@ def create_user_1(user: User):
 def test() -> str:
     return "Hello World"
 
+# Example of a function comment outside
 @router.get("/users")
 def get_users():
+    # Example of a function comment inside 1
     """
     Get all users from MongoDB.
     """
+    # Example of a function comment inside 2
     try:
         users_from_db = mongodb_client.get_all_documents("users")
         for user in users_from_db:
