@@ -44,6 +44,9 @@ def get_users():
         for user in users_from_db:
             user["_id"] = str(user["_id"])  # Convert ObjectId to string for JSON serialization
         return {"users": users_from_db}
+    """
+    Get all users from MongoDB 2.
+    """
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
 
@@ -59,6 +62,7 @@ def db_query(username, ontology_id, cypher: str, params=None) -> pd.DataFrame:
             cypher, parameters=params, result_transformer=Result.to_df
         )
     except Exception as e:
+        """Executes a Cypher statement and returns a DataFrame 2"""
         # Log the exact error
         logger.error(f"Cypher query failed. Query: {cypher}, Params: {params}, Error: {str(e)}")
         return pd.DataFrame()
