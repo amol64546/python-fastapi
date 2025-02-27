@@ -44,6 +44,14 @@ def get_users():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
 
+@router.post("/v1.0/node-relation/bulk", response_model=NodeRelation)
+async def create_node_relation(
+    node_relation_create_request: NodeRelationCreateRequest,
+    is_permission_required: bool = Query(...),
+    request: Request = None
+):
+    # Implement your logic here
+    return NodeRelation()  # Replace with actual logic
 
 
 def db_query(username, ontology_id, cypher: str, params=None) -> pd.DataFrame:
