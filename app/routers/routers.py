@@ -31,7 +31,10 @@ def create_user_1(user: User):
 def test() -> str:
     return "Hello World"
 
-# Example of a function comment outside
+# Example of a function comment outside 0
+"""
+Get all users from MongoDB 0
+"""
 @router.get("/users")
 def get_users():
     # Example of a function comment inside 1
@@ -44,11 +47,11 @@ def get_users():
         for user in users_from_db:
             user["_id"] = str(user["_id"])  # Convert ObjectId to string for JSON serialization
         return {"users": users_from_db}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
     """
     Get all users from MongoDB 2.
     """
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error fetching users: {str(e)}")
 
 
 def db_query(username, ontology_id, cypher: str, params=None) -> pd.DataFrame:
