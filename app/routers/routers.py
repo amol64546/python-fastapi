@@ -53,6 +53,21 @@ def get_users():
     Get all users from MongoDB 2.
     """
 
+@router.get("/users/{user_id}")
+def get_user_by_id(user_id: str):
+    """
+    Get a user by their unique user ID from MongoDB.
+    """
+    try:
+        user_from_db = mongodb_client.get_document_by_id("users", user_id)
+        if user_from_db:
+            user_from_db["_id"] = str(user_from_db["_id"])  # Convert ObjectId to string for JSON serialization
+            return {"user": user_from_db}
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
+
 
 def db_query(username, ontology_id, cypher: str, params=None) -> pd.DataFrame:
     """Executes a Cypher statement and returns a DataFrame"""
@@ -71,7 +86,7 @@ def db_query(username, ontology_id, cypher: str, params=None) -> pd.DataFrame:
         return pd.DataFrame()
 
 @router.post('/users/create')
-def create_user(name, email, skip: int = 0, limit: int = 10):
+def create_user(name, email):
     """Create a new user with name and email."""
     data = request.json  # request body
     return {"message": "User created", "user": data}  # response body
