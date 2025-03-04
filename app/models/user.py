@@ -1,5 +1,10 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
+from typing import Optional
 
-class User(BaseModel):
-    name: str
-    email: EmailStr
+class CreateUser(BaseModel):
+    username: str
+    email: str
+    password: str
+
+class User(CreateUser):
+    id: str

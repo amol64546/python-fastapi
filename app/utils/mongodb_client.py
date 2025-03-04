@@ -4,16 +4,13 @@ from pymongo import MongoClient
 import logging
 
 
-
-print(f"MONGO_URI: {os.getenv('MONGO_URI')}")
-
 class MongoDBClient:
     _instance = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super(MongoDBClient, cls).__new__(cls)
-            cls._instance.client = MongoClient(os.getenv("MONGO_URI"))
+            cls._instance.client = MongoClient("mongodb://localhost:27017/")
             cls._instance.database = cls._instance.client["test"]
         return cls._instance
 
