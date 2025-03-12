@@ -78,3 +78,7 @@ def c():
 
 def d():
     pass
+
+class test:
+    def test():
+        pass
