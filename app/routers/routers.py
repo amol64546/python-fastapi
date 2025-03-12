@@ -65,20 +65,16 @@ def get_user_by_id(user_id: str) -> User:
         raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
 
 
-def a():
-    b()
-    c()
+def d():
+    pass
+
+def c():
+    d()
 
 def b():
     c()
     d()
 
-def c():
-    d()
-
-def d():
-    pass
-
-class test:
-    def test():
-        pass
+def a():
+    b()
+    c()
