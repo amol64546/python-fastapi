@@ -63,3 +63,18 @@ def get_user_by_id(user_id: str) -> User:
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching user: {str(e)}")
+
+
+def a():
+    b()
+    c()
+
+def b():
+    c()
+    d()
+
+def c():
+    d()
+
+def d():
+    pass
